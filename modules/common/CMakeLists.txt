@@ -1,0 +1,17 @@
+set(COMMON_SRC
+        ../common/SSP.cpp
+        ../common/ssp/EditorHost.cpp
+        ../common/ssp/BaseEditor.cpp
+        ../common/ssp/SystemEditor.cpp
+        ../common/ssp/SingleViewEditor.cpp
+        ../common/ssp/MultiViewEditor.cpp
+        ../common/ssp/MultiBarEditor.cpp
+        ../common/ssp/LineParamEditor.cpp
+        ../common/ssp/BarParamEditor.cpp
+        ../common/ssp/BaseProcessor.cpp
+        ../common/ssp/ParamControl.cpp
+        ../common/ssp/ParamButton.cpp
+        ../common/ssp/ValueControl.cpp
+        ../common/ssp/ValueButton.cpp
+        ../common/ssp/SSPUI.cpp
+        )

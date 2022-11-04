@@ -1,0 +1,42 @@
+#include "PluginProcessor.h"
+#include "PluginEditor.h"
+
+#include "ssp/ParamControl.h"
+#include "ssp/ParamButton.h"
+
+using pcontrol_type = ssp::BarParamControl;
+using bcontrol_type = ssp::ParamButton;
+
+PluginEditor::PluginEditor(PluginProcessor &p)
+    : base_type(&p),
+      processor_(p) {
+    unsigned nParams = processor_.getNumRnboParameters();
+
+    for (unsigned page = 0; page <= (nParams / 4); page++) {
+        int paramS = page * 4;
+
+        std::shared_ptr<ssp::BaseParamControl> p[4];
+        for (unsigned i = 0; i < 4; i++) {
+            if ((paramS + i) < nParams) p[i] = std::make_shared<pcontrol_type>(processor_.params_.rnboParams_[paramS + i]->val_);
+            else p[i] = nullptr;
+        }
+
+        addParamPage(p[0], p[1], p[2], p[3]);
+    }
+
+    setSize(1600, 480);
+}
+
+
+void PluginEditor::drawView(Graphics &g) {
+    base_type::drawView(g);
+}
+
+
+void PluginEditor::resized() {
+    base_type::resized();
+    const unsigned h = 130;
+    const unsigned sp = 10;
+    unsigned y = 50;
+    unsigned x = 0;
+}
