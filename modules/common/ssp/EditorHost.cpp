@@ -79,14 +79,8 @@ void EditorHost::drawBasicPanel(Graphics &g) {
     g.setFont(Font(Font::getDefaultMonospacedFontName(), 24, Font::plain));
     g.setColour(Colours::yellow);
     g.drawSingleLineText(String(JucePlugin_Name) + " : "
-                         + String(JucePlugin_Desc)
-                         + String(" @ thetechnobear"),
+                         + String(JucePlugin_Desc),
                          10, 30);
-
-//    g.drawSingleLineText("thetechnobear's "
-//                         + String(JucePlugin_Name) + " : "
-//                         + String(JucePlugin_Desc),
-//                         10, 30);
 
     g.setColour(Colours::grey);
     g.drawSingleLineText("v " + String(JucePlugin_VersionString), 1505, 30);

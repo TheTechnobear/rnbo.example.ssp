@@ -1,5 +1,4 @@
-*/**
+**/*
 !common/**
 !README.md
 !CMakeLists.txt
-
