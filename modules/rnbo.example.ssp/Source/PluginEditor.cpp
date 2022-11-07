@@ -17,7 +17,19 @@ PluginEditor::PluginEditor(PluginProcessor &p)
 
         std::shared_ptr<ssp::BaseParamControl> p[4];
         for (unsigned i = 0; i < 4; i++) {
-            if ((paramS + i) < nParams) p[i] = std::make_shared<pcontrol_type>(processor_.params_.rnboParams_[paramS + i]->val_);
+            float inc = 1.0f;
+            float finc = 0.01f;
+
+            if ((paramS + i) < nParams)  {
+                const auto &param = processor_.params_.rnboParams_[paramS + i];
+                if (param->info_.enumValues != nullptr) {
+                    finc = inc;
+                } else if (param->info_.steps > 2) {
+                    inc = (param->info_.max - param->info_.min) / param->info_.steps;
+                    finc = inc;
+                }
+                p[i] = std::make_shared<pcontrol_type>(param->val_, inc, finc);
+            }
             else p[i] = nullptr;
         }
 

@@ -23,20 +23,17 @@ PluginProcessor::PluginProcessor(
     init();
 
     nInputs_ = rnboObj_.getNumInputChannels();
-//    Logger::writeToLog("getNumInputChannels -> " + String(nInputs_));
     inputBuffers_ = new RNBO::number *[nInputs_];
     for (int i = 0; i < nInputs_; i++) {
         inputBuffers_[i] = new RNBO::number[bufferSize_];
     }
     nOutputs_ = rnboObj_.getNumOutputChannels();
-//    Logger::writeToLog("getNumOutputChannels -> " + String(nOutputs_));
     outputBuffers_ = new RNBO::number *[nOutputs_];
     for (int i = 0; i < nOutputs_; i++) {
         outputBuffers_[i] = new RNBO::number[bufferSize_];
     }
 
     nParams_ = rnboObj_.getNumParameters();
-//    Logger::writeToLog("PluginProcessor::Params_ -> " + String(nParams_));
 }
 
 PluginProcessor::~PluginProcessor() {
@@ -55,12 +52,8 @@ PluginProcessor::RnboParam::RnboParam(AudioProcessorValueTreeState &apvt, String
 
     RNBO::CoreObject rnboObj_;
 //    unsigned idx = rnboObj_.getParameterIndexForID(id_.c_str());
-    desc_=rnboObj_.getParameterName(idx_);
-    rnboObj_.getParameterInfo(idx_,&info_);
-//    Logger::writeToLog("RnboParam.id -> " + id_);
-//    Logger::writeToLog("RnboParam.id -> " + String(idx_));
-//    Logger::writeToLog("RnboParam.desc -> " + desc_);
-//    Logger::writeToLog("RnboParam.min/max -> " + String(info_.min) + " / " + String(info_.max));
+    desc_ = rnboObj_.getParameterName(idx_);
+    rnboObj_.getParameterInfo(idx_, &info_);
 }
 
 
@@ -68,8 +61,8 @@ PluginProcessor::PluginParams::PluginParams(AudioProcessorValueTreeState &apvt) 
     RNBO::CoreObject rnboObj_;
     unsigned nParams = rnboObj_.getNumParameters();
     for (unsigned i = 0; i < nParams; i++) {
-        String id=rnboObj_.getParameterId(i);
-        rnboParams_.push_back(std::make_unique<RnboParam>(apvt, id,i));
+        String id = rnboObj_.getParameterId(i);
+        rnboParams_.push_back(std::make_unique<RnboParam>(apvt, id, i));
     }
 }
 
@@ -82,15 +75,27 @@ AudioProcessorValueTreeState::ParameterLayout PluginProcessor::createParameterLa
     unsigned nParams = rnboObj_.getNumParameters();
     for (unsigned pn = 0; pn < nParams; pn++) {
         String id = rnboObj_.getParameterId(pn);
-        String desc = rnboObj_.getParameterName(pn);
         RNBO::ParameterInfo info;
-        rnboObj_.getParameterInfo(pn,&info);
+        rnboObj_.getParameterInfo(pn, &info);
+        String desc = info.displayName;
+        if (desc.length() == 0) desc = rnboObj_.getParameterName(pn);
 
-        // todo: handle different parameter types ? (e.g. enums, increments)
-        params.add(std::make_unique<ssp::BaseFloatParameter>(id, desc, info.min, info.max, info.initialValue));
-//        Logger::writeToLog("ParameterId -> " + id);
-//        Logger::writeToLog("ParameterName -> " + desc);
-//        Logger::writeToLog("ParameterInfo.min/max -> " + String(info.min) + " / " + String(info.max));
+        if (info.enumValues) {
+            juce::StringArray choices;
+            for (unsigned i = 0; i < info.steps; i++) {
+                choices.add(info.enumValues[i]);
+            }
+            params.add(std::make_unique<ssp::BaseChoiceParameter>(id, desc, choices, info.initialValue));
+        } else {
+            if (info.steps < 2) {
+                params.add(std::make_unique<ssp::BaseFloatParameter>(id, desc, info.min, info.max, info.initialValue));
+            } else if (info.steps == 2) {
+                params.add(std::make_unique<ssp::BaseBoolParameter>(id, desc, info.initialValue > 0.5f));
+            } else {
+                float inc = (info.max - info.min) / info.steps;
+                params.add(std::make_unique<ssp::BaseFloatParameter>(id, desc, info.min, info.max, info.initialValue, inc));
+            }
+        }
     }
     return params;
 }
@@ -98,7 +103,7 @@ AudioProcessorValueTreeState::ParameterLayout PluginProcessor::createParameterLa
 const String PluginProcessor::getInputBusName(int channelIndex) {
     RNBO::CoreObject rnboObj_;
     unsigned I_MAX = rnboObj_.getNumInputChannels();
-    if (channelIndex < I_MAX) { return "In "+ String(channelIndex); }
+    if (channelIndex < I_MAX) { return "In " + String(channelIndex); }
     return "ZZIn-" + String(channelIndex);
 }
 
@@ -106,7 +111,7 @@ const String PluginProcessor::getInputBusName(int channelIndex) {
 const String PluginProcessor::getOutputBusName(int channelIndex) {
     RNBO::CoreObject rnboObj_;
     unsigned O_MAX = rnboObj_.getNumOutputChannels();
-    if (channelIndex < O_MAX) { return "Out "+ String(channelIndex); }
+    if (channelIndex < O_MAX) { return "Out " + String(channelIndex); }
     return "ZZOut-" + String(channelIndex);
 }
 
@@ -124,7 +129,7 @@ void PluginProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
             outputBuffers_[i] = new RNBO::number[bufferSize_];
         }
     }
-    rnboObj_.prepareToProcess(sampleRate,samplesPerBlock);
+    rnboObj_.prepareToProcess(sampleRate, samplesPerBlock);
 }
 
 void PluginProcessor::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) {
@@ -132,26 +137,26 @@ void PluginProcessor::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMe
 
 
     // set parameters up for patch
-    for(auto& p : params_.rnboParams_) {
+    for (auto &p: params_.rnboParams_) {
         // todo : is this norm value?
         rnboObj_.setParameterValue(p->idx_, normValue(p->val_));
     }
     // later can perhaps use vector copies?
     {
         // process input
-        for(unsigned c = 0;c<nInputs_;c++) {
+        for (unsigned c = 0; c < nInputs_; c++) {
             for (unsigned i = 0; i < n; i++) {
-                inputBuffers_[c][i] = buffer.getSample(c,i);
+                inputBuffers_[c][i] = buffer.getSample(c, i);
             }
         }
     }
-    rnboObj_.process(inputBuffers_,nInputs_,outputBuffers_,nOutputs_,bufferSize_);
+    rnboObj_.process(inputBuffers_, nInputs_, outputBuffers_, nOutputs_, bufferSize_);
 
     {
         // copy output
-        for(unsigned c = 0;c<nOutputs_;c++) {
+        for (unsigned c = 0; c < nOutputs_; c++) {
             for (unsigned i = 0; i < n; i++) {
-                buffer.setSample(c,i,outputBuffers_[c][i]);
+                buffer.setSample(c, i, outputBuffers_[c][i]);
             }
         }
     }
