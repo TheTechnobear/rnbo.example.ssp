@@ -101,7 +101,7 @@ AudioProcessorValueTreeState::ParameterLayout PluginProcessor::createParameterLa
                 } else if (info.steps == 2) {
                     params.add(std::make_unique<ssp::BaseBoolParameter>(id, desc, info.initialValue > 0.5f));
                 } else {
-                    float inc = (info.max - info.min) / info.steps;
+                    float inc = (info.max - info.min) / (info.steps - 1);
                     params.add(std::make_unique<ssp::BaseFloatParameter>(id, desc, info.min, info.max, info.initialValue, inc));
                 }
             }

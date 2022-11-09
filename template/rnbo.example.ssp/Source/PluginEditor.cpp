@@ -25,7 +25,7 @@ PluginEditor::PluginEditor(PluginProcessor &p)
                 if (param->info_.enumValues != nullptr) {
                     finc = inc;
                 } else if (param->info_.steps > 2) {
-                    inc = (param->info_.max - param->info_.min) / param->info_.steps;
+                    inc = (param->info_.max - param->info_.min) / (param->info_.steps - 1);
                     finc = inc;
                 }
                 p[i] = std::make_shared<pcontrol_type>(param->val_, inc, finc);
