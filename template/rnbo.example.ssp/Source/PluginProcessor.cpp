@@ -33,7 +33,11 @@ PluginProcessor::PluginProcessor(
         outputBuffers_[i] = new RNBO::number[bufferSize_];
     }
 
-    nParams_ = rnboObj_.getNumParameters();
+    nParams_ = params_.rnboParams_.size();
+    lastParamVals_ = new float[nParams_];
+    for(int i=0;i<0;i++) {
+        lastParamVals_[i] = -1.0;
+    }
 }
 
 PluginProcessor::~PluginProcessor() {
@@ -61,8 +65,12 @@ PluginProcessor::PluginParams::PluginParams(AudioProcessorValueTreeState &apvt) 
     RNBO::CoreObject rnboObj_;
     unsigned nParams = rnboObj_.getNumParameters();
     for (unsigned i = 0; i < nParams; i++) {
+        RNBO::ParameterInfo info;
         String id = rnboObj_.getParameterId(i);
-        rnboParams_.push_back(std::make_unique<RnboParam>(apvt, id, i));
+        rnboObj_.getParameterInfo(i,&info);
+        if(info.visible) {
+            rnboParams_.push_back(std::make_unique<RnboParam>(apvt, id, i));
+        }
     }
 }
 
@@ -77,23 +85,25 @@ AudioProcessorValueTreeState::ParameterLayout PluginProcessor::createParameterLa
         String id = rnboObj_.getParameterId(pn);
         RNBO::ParameterInfo info;
         rnboObj_.getParameterInfo(pn, &info);
-        String desc = info.displayName;
-        if (desc.length() == 0) desc = rnboObj_.getParameterName(pn);
+        if(info.visible) {
+            String desc = info.displayName;
+            if (desc.length() == 0) desc = rnboObj_.getParameterName(pn);
 
-        if (info.enumValues) {
-            juce::StringArray choices;
-            for (unsigned i = 0; i < info.steps; i++) {
-                choices.add(info.enumValues[i]);
-            }
-            params.add(std::make_unique<ssp::BaseChoiceParameter>(id, desc, choices, info.initialValue));
-        } else {
-            if (info.steps < 2) {
-                params.add(std::make_unique<ssp::BaseFloatParameter>(id, desc, info.min, info.max, info.initialValue));
-            } else if (info.steps == 2) {
-                params.add(std::make_unique<ssp::BaseBoolParameter>(id, desc, info.initialValue > 0.5f));
+            if (info.enumValues) {
+                juce::StringArray choices;
+                for (unsigned i = 0; i < info.steps; i++) {
+                    choices.add(info.enumValues[i]);
+                }
+                params.add(std::make_unique<ssp::BaseChoiceParameter>(id, desc, choices, info.initialValue));
             } else {
-                float inc = (info.max - info.min) / info.steps;
-                params.add(std::make_unique<ssp::BaseFloatParameter>(id, desc, info.min, info.max, info.initialValue, inc));
+                if (info.steps < 2) {
+                    params.add(std::make_unique<ssp::BaseFloatParameter>(id, desc, info.min, info.max, info.initialValue));
+                } else if (info.steps == 2) {
+                    params.add(std::make_unique<ssp::BaseBoolParameter>(id, desc, info.initialValue > 0.5f));
+                } else {
+                    float inc = (info.max - info.min) / info.steps;
+                    params.add(std::make_unique<ssp::BaseFloatParameter>(id, desc, info.min, info.max, info.initialValue, inc));
+                }
             }
         }
     }
@@ -136,10 +146,15 @@ void PluginProcessor::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMe
     size_t n = buffer.getNumSamples();
 
 
-    // set parameters up for patch
+    // set parameters up for patch, only set on change
+    unsigned pi=0;
     for (auto &p: params_.rnboParams_) {
-        // todo : is this norm value?
-        rnboObj_.setParameterValue(p->idx_, normValue(p->val_));
+        float val = p->val_.getValue();
+        if(lastParamVals_[pi]!=val) {
+            rnboObj_.setParameterValue(p->idx_, normValue(p->val_));
+            lastParamVals_[pi]=val;
+        }
+        pi++;
     }
     // later can perhaps use vector copies?
     {

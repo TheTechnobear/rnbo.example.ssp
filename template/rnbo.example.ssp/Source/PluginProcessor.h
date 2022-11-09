@@ -79,7 +79,8 @@ private:
     int nOutputs_ = 0;
     RNBO::number **outputBuffers_;
     int nParams_ = 0;
-//    RNBO::ParameterInfo *paramInfo_;
+
+    float *lastParamVals_;
 
     bool isBusesLayoutSupported(const BusesLayout &layouts) const override {
         return true;
