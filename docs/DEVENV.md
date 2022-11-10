@@ -20,23 +20,6 @@ this document covers the first two step, the others are covered in the BUILDING 
 - build module
 
 
-## prerequisites 
-
-- clone this repository locally 
-- download the ssp buildroot 
-- ensure required dev software is installed 
--- llvm (includes clang)
--- cmake
--- git (optional)  
--- vst3 sdk
-
-TO DO : clarify these steps 
-
-TODO : clang path need to abstact 
-TODO : sdk path abstract
-
-git submodule update --init --recursive
-
 # install Linux development tools 
 ```
     sudo apt install cmake git llvm clang g++-10-arm-linux-gnueabihf 
@@ -60,7 +43,24 @@ brew install cmake git llvm
 (some installs may need arm-linux-gnueabihf-binutils, gcc-arm-embedded)
 
 
+## mac m1 - homebrew config
+place the following in .zshrc
+```
+export PATH=/opt/homebrew/bin:"${PATH}"
+```
 
+## intel macs - homebrew config 
+place the following in .zshrc/.bashrc as appropiate.
+
+
+```
+export TOOLSROOT=/usr/local/opt/llvm/bin
+export PATH=/usr/local/bin:"${PATH}"
+```
+
+this is required to place build tools on your path.
+TOOLSROOT in the cmake file default to the M1 location for homebrew.
+but the above overrides for where homebrew is placed for intel macs.
 
 
 
