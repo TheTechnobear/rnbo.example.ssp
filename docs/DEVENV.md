@@ -37,10 +37,10 @@ highly recommended :)  see https://brew.sh
 
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install cmake git llvm 
+brew install cmake git llvm pkg-config arm-linux-gnueabihf-binutils
 
 ```
-(some installs may need arm-linux-gnueabihf-binutils, gcc-arm-embedded)
+(some installs may need gcc-arm-embedded)
 
 
 ## mac m1 - homebrew config
@@ -54,7 +54,6 @@ place the following in .zshrc/.bashrc as appropiate.
 
 
 ```
-export TOOLSROOT=/usr/local/opt/llvm/bin
 export PATH=/usr/local/bin:"${PATH}"
 ```
 
@@ -82,6 +81,18 @@ mv ~/Downloads/arm-rockchip-linux-gnueabihf_sdk-buildroot.tar.gz  .
 tar xzf arm-rockchip-linux-gnueabihf_sdk-buildroot.tar.gz
 ```
 
+decompression (gz) may not be necessary on some OS versions or browsers, as they may automatically unzip.
+if its just .tar use.
+```
+tar xf arm-rockchip-linux-gnueabihf_sdk-buildroot.tar
+```
+
+if all is ok, then we will see
+```
+% ls ~/buildroot/arm-rockchip-linux-gnueabihf_sdk-buildroot/libexec 
+awk     c++-analyzer    ccc-analyzer    gcc
+```
+
 the location of the buildroot can be changed e.g.
 ```
 export BUILDROOT=$HOME/buildroot/ssp/arm-rockchip-linux-gnueabihf_sdk-buildroot
@@ -103,25 +114,29 @@ then unzip into this diretory
 
 note: expecting SDK in $HOME/SDKs/vst3-sdk", 
 
-this directory can be overrided e.g. 
+you may need to do something like 
+
+```
+unzip VST_SDK.zip
+mv VST_SDK/vst3sdk vst3-sdk
+```
+
+
+then in vst3-sdk you wil seen something like
+```
+% ls ~/SDKs/vst3-sdk 
+CMakeLists.txt          VST3_License_Agreement.pdf  bin             index.html          tools
+LICENSE.txt         VST3_Usage_Guidelines.pdf   cmake               pluginterfaces          vstgui4
+README.md           base                doc             public.sdk
+```
+
+
+note: this directory can be overrided e.g. 
 ```
 export VSTSDK=$HOME/SDKs/vst3-sdk
 ```
 
-## build environment 
 
-## TODO : talk about using llvm as cross compiler and the role of build root ## 
-
-
-## building 
-
-```
-cd examples
-mkdir build 
-cd build 
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../xcSSP.cmake .. 
-cmake --build . -- -j 8 
-```
 
 
 
