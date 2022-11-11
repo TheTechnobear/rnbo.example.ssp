@@ -57,9 +57,6 @@ place the following in .zshrc/.bashrc as appropiate.
 export PATH=/usr/local/bin:"${PATH}"
 ```
 
-this is required to place build tools on your path.
-TOOLSROOT in the cmake file default to the M1 location for homebrew.
-but the above overrides for where homebrew is placed for intel macs.
 
 
 
@@ -93,7 +90,7 @@ if all is ok, then we will see
 awk     c++-analyzer    ccc-analyzer    gcc
 ```
 
-the location of the buildroot can be changed e.g.
+note: this directory can be overriden using environment var (if you need to..)
 ```
 export BUILDROOT=$HOME/buildroot/ssp/arm-rockchip-linux-gnueabihf_sdk-buildroot
 ```
@@ -105,7 +102,7 @@ so, we also need to download the VST 3 SDK from steinberg and place into SDKs di
 https://www.steinberg.net/developers/
 
 
-by defaul build expects the '~/SDKs/'
+by default build expects the '~/SDKs/'
 ```
 mkdir ~/SDKs
 cd ~/SDKs
@@ -131,7 +128,7 @@ README.md           base                doc             public.sdk
 ```
 
 
-note: this directory can be overrided e.g. 
+note: this directory can be overriden using environment var (if you need to..)
 ```
 export VSTSDK=$HOME/SDKs/vst3-sdk
 ```
