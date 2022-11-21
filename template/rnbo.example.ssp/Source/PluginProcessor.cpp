@@ -35,7 +35,7 @@ PluginProcessor::PluginProcessor(
 
     nParams_ = params_.rnboParams_.size();
     lastParamVals_ = new float[nParams_];
-    for(int i=0;i<0;i++) {
+    for (int i = 0; i < 0; i++) {
         lastParamVals_[i] = -1.0;
     }
 }
@@ -67,8 +67,8 @@ PluginProcessor::PluginParams::PluginParams(AudioProcessorValueTreeState &apvt) 
     for (unsigned i = 0; i < nParams; i++) {
         RNBO::ParameterInfo info;
         String id = rnboObj_.getParameterId(i);
-        rnboObj_.getParameterInfo(i,&info);
-        if(info.visible) {
+        rnboObj_.getParameterInfo(i, &info);
+        if (info.visible) {
             rnboParams_.push_back(std::make_unique<RnboParam>(apvt, id, i));
         }
     }
@@ -85,7 +85,7 @@ AudioProcessorValueTreeState::ParameterLayout PluginProcessor::createParameterLa
         String id = rnboObj_.getParameterId(pn);
         RNBO::ParameterInfo info;
         rnboObj_.getParameterInfo(pn, &info);
-        if(info.visible) {
+        if (info.visible) {
             String desc = info.displayName;
             if (desc.length() == 0) desc = rnboObj_.getParameterName(pn);
 
@@ -147,12 +147,12 @@ void PluginProcessor::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMe
 
 
     // set parameters up for patch, only set on change
-    unsigned pi=0;
+    unsigned pi = 0;
     for (auto &p: params_.rnboParams_) {
         float val = p->val_.getValue();
-        if(lastParamVals_[pi]!=val) {
+        if (lastParamVals_[pi] != val) {
             rnboObj_.setParameterValue(p->idx_, normValue(p->val_));
-            lastParamVals_[pi]=val;
+            lastParamVals_[pi] = val;
         }
         pi++;
     }
@@ -179,7 +179,7 @@ void PluginProcessor::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMe
 }
 
 AudioProcessorEditor *PluginProcessor::createEditor() {
-    return new ssp::EditorHost(this, new PluginEditor(*this));
+    return new ssp::EditorHost(this, new PluginEditor(*this, params_.rnboParams_.size() / 16));
 }
 
 AudioProcessor *JUCE_CALLTYPE createPluginFilter() {

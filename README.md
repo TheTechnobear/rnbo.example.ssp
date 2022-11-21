@@ -63,7 +63,6 @@ In this way, we can use this project, to enable us to prototype a module, but la
 
 # Current Limitations 
 (subject to change)
-- max 16 parameters
 - no midi support
 - in~/out~ are unnamed (RNBO limitation) 
 
