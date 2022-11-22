@@ -14,4 +14,8 @@ set(COMMON_SRC
         ../common/ssp/ValueControl.cpp
         ../common/ssp/ValueButton.cpp
         ../common/ssp/SSPUI.cpp
+        ../common/rnbo/RnboBasePluginProcessor.cpp
+        ../common/rnbo/RnboBasePluginEditor.cpp
+#        ../common/rnbo/RnboPluginProcessor.cpp
+#        ../common/rnbo/RnboPluginEditor.cpp
         )
