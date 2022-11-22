@@ -1,5 +1,3 @@
-# STATUS : Unreleased
-
 # Building SSP modules from Max RNBO patches
 
 this project is designed to allow non-developers to create modules for the Percussa SSP,  using  [Cycling 74s RNBO](https://cycling74.com/products/rnbo)
@@ -12,21 +10,19 @@ modules created are completely independent of RNBO, and so can be used without a
 This projects currently is only support on macOS and Linux.
 
 Whilst windows users could modify build files, this is non-trivial.
-I would recommend instead, installing a Virtual Machine (VM), and run Linux under windows.
+I would recommend installing a Virtual Machine (VM), and run Linux under windows.
 
 
 # Getting Started
 
-The first step for creating Percussa SSP modules is to create a development environment.
+There are two steps for creating Percussa SSP modules based on RNBO
+
+first, is to create a 'development environment', covered in [docs/DEVENV.md](docs/DEVENV.md)
+
+second, is to download projects, and build them, covered in [docs/BUILDING.md](docs/BUILDING.md)
 
 
-This is covered in [docs/DEVENV.md](docs/DEVENV.md)
-
-note: this environement is suitable for building any Percussa SSP modules, and is not specific to RNBO.
-
-Now we have a development environement installed, we can now download this project and start creating modules
-
-This is covered in [docs/BUILDING.md](docs/BUILDING.md)
+note: the development enviroment stage is **identical** the one used for the percussa ssp sdk.
 
 
 # Next Steps

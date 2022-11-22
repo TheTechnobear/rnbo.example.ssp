@@ -1,32 +1,48 @@
-#### WORK IN PROGRESS ### 
+# building 
+This document covers creating/downloading a project , and then building it for the SSP.
 
 
-# Building 
+# general workflow
+There are three steps to build SSP modules, which must be completed in order.
 
-This document discusses how to create and build modules for the SSP. 
-it assumes you have setup the development environment **first**, which is detailed in DEVENV.md
-.. do not proceed in with this doc, until you have setup the development. 
+a) setup the development environment 
+done once, and overed in DEVENV.md
 
+b) download/create project 
+done once, per project, and covered in this document.
 
-
-# General procedure
-
-there are 4 general steps to setting up our environment for building SSP modules.
-this document covers the last threee two step, the others are covered in the DEVENV document, and must be done first.
-
-
-- install development tools 
-- install required libraries (VST SDK and SSP Buildroot)
-- download repository with code
-- prepare build
-- build module
+c) build project
+done each time you want to build/create the modules for the SSP
 
 
 note: you will need to ensure the build tools from the development enviroment are on your path.
+(as covered in DEVENV.md)
 
 
 
-## Download repo and prepare it.
+Note: 
+Specific directories and examples are mentioned in these documents.
+however, most can be changed to your own requirements, with simple overrides.
+but this is not covered extensively here, to keep things clear and simple.
+
+
+-----
+
+# download/create project using RNBO 
+
+obviously we need to have some code to create a module :)
+either we are going to create our own new code, or download an existing project.
+
+lets cover the first.
+
+
+notes:
+Im not going to cover in any detail, the following   
+- git, there are many guides on this
+- c++ programming, dsp programming and related
+(Id recommend the juce docs for a good starter here)
+
+
 
 we first download the code from github, I suggest putting the code in a directory somewhere
 
@@ -55,10 +71,49 @@ git submodule update --init --recursive
 ok, congratulations... now we are all set to create our first module!
 
 
-## Creating a module
 
-the repo we have downloaded contains a template project which we use to create YOUR specific module.
+# building examples 
 
+
+first we will just build the example that is included to get used to the build system.
+(then we will create our own module :) )
+
+### STEP 1 - prepare the build (examples)
+assuming we are using the ssp-sdk examples as above
+so are in `~/projects/ssp-sdk`
+
+```
+cd examples
+mkdir build 
+cd build 
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../xcSSP.cmake .. 
+```
+
+
+
+### STEP 2 - compile (examples) 
+
+the moment we have been building up to...actually compiling the module! 
+
+```
+cmake --build . -- -j 4 
+```
+
+voila, we have build the modules
+
+you will see that whilst building, it reports the targets... 
+aka, the modules that you are going to want to copy to your SSP 
+
+
+
+
+
+--- 
+
+now the moment you have been waiting for... creating your very own modules ! 
+
+
+# creating your OWN rnbo based modules ! 
 
 
 ### STEP 1 - create your MODULE
@@ -102,18 +157,21 @@ using RNBO is beyond the scope of this document ;)
 
 
 ### STEP 3a - prepare the build
-this step only needs to be done once, each time you create a new module.
-as it prepares the build
+this step only needs to be done once, each time you create a new module, as it prepares the build
 
-we basically create a build directory, and then tell cmake to look for modules to compile.
+we basically create a build directory (if it doesnt exist)
 ```
 mkdir build 
 cd build 
+```
+
+then we prepare the build files
+```
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../xcSSP.cmake .. 
 ```
 
 
-### STEP 3b - build out module
+### STEP 3b - compiling our module
 the moment of truth, we can now build our SSP module 
 ```
 cd build 
@@ -160,10 +218,6 @@ but you also need to edit the modules/CMakeList.txt and remove
 ```
 add_subdirectory(TEST)
 ```
-
-
-
-
 
 
 

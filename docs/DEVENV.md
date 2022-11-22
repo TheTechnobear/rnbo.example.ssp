@@ -1,23 +1,29 @@
-#### WORK IN PROGRESS ### 
-
-
 # Setting up a development environment
-
-This document discusses how to setup a development environment for build SSP modules.
-
+This document discusses how to setup a development environment for building SSP modules.
 
 
-# General procedure
+# General workflow
+There are three steps to build SSP modules, which must be completed in order.
 
-there are 3 general steps to setting up our environment for building SSP modules.
-this document covers the first two step, the others are covered in the BUILDING document.
+a) setup the development environment 
+done once, and overed in DEVENV.md
+
+b) download/create project 
+done once, per project, and covered in this document.
+
+c) build project
+done each time you want to build/create the modules for the SSP
 
 
-- install development tools 
-- install required libraries (VST SDK and SSP Buildroot)
-- download repository with code
-- prepare build
-- build module
+note: you will need to ensure the build tools from the development enviroment are on your path.
+(as covered in DEVENV.md)
+
+
+
+Note: 
+Specific directories and examples are mentioned in these documents.
+however, most can be changed to your own requirements, with simple overrides.
+but this is not covered extensively here, to keep things clear and simple.
 
 
 # install Linux development tools 
@@ -63,11 +69,12 @@ export PATH=/usr/local/bin:"${PATH}"
 # setup requirements for build
 
 we need a copy of the build root for the SSP to build
-this is detailed in this post
+this is detailed in this post:
 https://forum.percussa.com/t/update-13072022-superbooth-2022-sd-card-image-fixes-for-usb-audio-sample-rate-switching-asio-support/1556
 
 we need to download from :
 https://sw13072022.s3.us-west-1.amazonaws.com/arm-rockchip-linux-gnueabihf_sdk-buildroot.tar.gz
+
 
 unzip into `~/buildroot` e.g.
 
