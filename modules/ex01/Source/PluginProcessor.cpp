@@ -35,7 +35,7 @@ PluginProcessor::PluginProcessor(
 
     rnbo_.nParams_ = params_.rnboParams_.size();
     rnbo_.lastParamVals_ = new float[rnbo_.nParams_];
-    for (int i = 0; i < 0; i++) {
+    for (int i = 0; i < rnbo_.nParams_; i++) {
         rnbo_.lastParamVals_[i] = -1.0;
     }
 }
