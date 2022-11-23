@@ -7,6 +7,7 @@ sed "s/XXXX/$1/" "modules/$1/CMakeLists.tmp" > "modules/$1/CMakeLists.txt"
 
 # add new module to build
 echo "add_subdirectory($1)" >> modules/CMakeLists.txt
+rm "modules/$1/CMakeLists.tmp"
 
 
 # give users some instructions
