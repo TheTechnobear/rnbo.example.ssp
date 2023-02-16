@@ -2,7 +2,7 @@
 
 this project is designed to allow non-developers to create modules for the Percussa SSP,  using  [Cycling 74s RNBO](https://cycling74.com/products/rnbo)
 
-modules created are completely independent of RNBO, and so can be used without a Max or RNBO license.
+modules created are completely independent of RNBO, and so can be **used** without a Max or RNBO license.
 
 
 # Requirements
@@ -40,7 +40,8 @@ No, but its beneficial, if you wish to CREATE modules.
 any module created with this project can be used by any SSP user **WITHOUT** MAX/RNBO.
 
 
-
+# Max / RNBO Version
+tested version :   Max 8.5.3 / RNBO v1.1.0 
 
 
 
