@@ -129,6 +129,5 @@ target_link_libraries(XXXX PRIVATE
         juce::juce_audio_utils)
 
 
-#set_target_properties(${PROJECT_NAME}_VST PROPERTIES PREFIX "")
 set_target_properties(${PROJECT_NAME}_VST3 PROPERTIES PREFIX "")
 

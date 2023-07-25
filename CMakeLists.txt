@@ -21,17 +21,6 @@ endif ()
 
 add_subdirectory(juce)
 
-if (DEFINED ENV{VSTSDK})
-    set(VSTSDK $ENV{VSTSDK})
-else ()
-    set(VSTSDK "$ENV{HOME}/SDKs/vst3-sdk")
-endif ()
-
-message("using VSTSDK  :  ${VSTSDK}")
-
-juce_set_vst2_sdk_path(${VSTSDK})
-
-
 add_subdirectory(modules)
 
 # set(CMAKE_FOLDER .)
