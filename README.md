@@ -1,3 +1,11 @@
+# deprecated
+This repo is deprecated, a so will receive no further updates. 
+
+a new repo is now avalable that supports both the SSP and XMX.
+https://github.com/TheTechnobear/PERCUSSA.RNBO
+
+
+
 # Building SSP modules from Max RNBO patches
 
 this project is designed to allow non-developers to create modules for the Percussa SSP,  using  [Cycling 74s RNBO](https://cycling74.com/products/rnbo)
