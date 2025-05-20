@@ -1,8 +1,13 @@
 # Deprecation Notice
-This repo is deprecated and will receive no further updates. 
+This repo is deprecated and will receive no further updates or support.
 
 a new repo is now avalable that supports both the SSP and XMX.
 https://github.com/TheTechnobear/PERCUSSA.RNBO
+
+note: it should continue to work, as of rnbo 1.3.4 - so devs can transition at thier own pace.
+
+--------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 
 
 
