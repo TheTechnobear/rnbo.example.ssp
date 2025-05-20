@@ -1,4 +1,4 @@
-# deprecated
+# Deprecated Notice
 This repo is deprecated, a so will receive no further updates. 
 
 a new repo is now avalable that supports both the SSP and XMX.
